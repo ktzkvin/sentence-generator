@@ -160,8 +160,6 @@ void extract_line(char *tab, int line_number){
 }
 
 void decompose_line(char *temp_ligne, char **tab_off){  // temp_ligne = tableau temporaire contenant la ligne, tab_off = tableau séparant les 3 types de la ligne
-    printf("[RAPPEL] Ligne extraite :\n%s", temp_ligne);
-    printf("--------------\n");
     FILE *fileptr;
     // Ouverture du fichier
     fileptr = fopen("dico_10_lignes.txt", "r");
@@ -186,7 +184,7 @@ void decompose_line(char *temp_ligne, char **tab_off){  // temp_ligne = tableau 
 }
 
 
-int Nature_Ligne_3(char **tab){
+int nature_line(char **tab){
     char *token;
     token = strtok(tab[2], "\t");
     if (strncmp(token, "Ver", 3) == 0){
