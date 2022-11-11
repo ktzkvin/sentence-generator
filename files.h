@@ -10,6 +10,6 @@ int **extract_column_2();
 int **extract_column_3();
 void extract_line(char *, int);
 void decompose_line(char *, char **);
-int Nature_Ligne_3(char **);
+int nature_line(char **);
 
 #endif //SENTENCE_GENERATOR_FILES_H
