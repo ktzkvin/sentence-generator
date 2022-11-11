@@ -179,9 +179,22 @@ int main()
     text2 = (char **) extract_column_2();
     text3 = (char **) extract_column_3();
 
-    char *ligne = malloc(100 * sizeof(char));
-    extract_line(ligne, 3);
-    printf("%s", ligne);
+    char *temp_ligne = malloc(100 * sizeof(char));  // Création d'un tableau temporaire pour enregistrer une ligne
+
+    char **tab_off = malloc(100 * sizeof(char));  // Création d'un tableau pour séparer les 3 types d'une ligne dans un tableau en 3 lignes
+    for (int i = 0; i < 100; i++) {
+        tab_off[i] = malloc(3 * sizeof(char));
+    }
+    int number_line = 6;  // Numéro de la ligne du fichier
+    extract_line(temp_ligne, number_line);  // Extraction de la ligne
+    printf("\n--------------\nLigne numero %d :\n%s", number_line, temp_ligne);
+    printf("--------------\n");
+    decompose_line(temp_ligne, tab_off);
+    printf("%s\n%s\n%s\n", tab_off[0], tab_off[1], tab_off[2]);
+
+    printf("\n");
+
     return 0;
+
 }
 

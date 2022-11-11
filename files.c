@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "files.h"
 
 #define MAX_BUFFER 1000
@@ -139,7 +140,7 @@ int **extract_column_3(){
     return (int **) text;
 }
 
-void *extract_line(char *tab, int line_number){
+void extract_line(char *tab, int line_number){
     FILE *fileptr;
     // Ouverture du fichier
     fileptr = fopen("dico_10_lignes.txt", "r");
@@ -156,5 +157,52 @@ void *extract_line(char *tab, int line_number){
     }
     // Fermeture du fichier
     fclose(fileptr);
-    return 0;
+}
+
+void decompose_line(char *tab1, char **tab2){  // Un tableau comportant la ligne et un tableau de 3 lignes vide à remplir
+    printf("[RAPPEL] Ligne extraite :\n%s", tab1);
+    printf("--------------\n");
+    FILE *fileptr;
+    // Ouverture du fichier
+    fileptr = fopen("dico_10_lignes.txt", "r");
+    // Problème lors de la lecture du fichier
+    if (fileptr == NULL) {
+        printf("Erreur d'ouverture du fichier\n");
+    }
+
+    // Lecture du fichier + stockage dans la première ligne du tableau tab2
+    if (fileptr != NULL) {
+        char line[100];
+        char *token;
+        int i = 0;
+        while (fgets(tab2[0], sizeof(line), tab1) != NULL) {
+            token = strtok(line, "\t");
+            strcpy(tab2[0], token);
+            i++;
+        }
+        printf("%s", line);
+    }
+
+    // Fermeture du fichier
+    fclose(fileptr);
+}
+
+int Nature_Ligne_3(char **tab){
+    char *token;
+    token = strtok(tab[2], "\t");
+    if (strncmp(token, "Ver", 3) == 0){
+        return 1;
+    }
+    else if (strncmp(token, "Nom", 3) == 0){
+        return 2;
+    }
+    else if (strncmp(token, "Adj", 3) == 0){
+        return 3;
+    }
+    else if (strncmp(token, "Adv", 3) == 0){
+        return 4;
+    }
+    else{
+        return 0;
+    }
 }
