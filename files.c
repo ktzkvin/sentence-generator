@@ -159,8 +159,8 @@ void extract_line(char *tab, int line_number){
     fclose(fileptr);
 }
 
-void decompose_line(char *tab1, char **tab2){  // Un tableau comportant la ligne et un tableau de 3 lignes vide à remplir
-    printf("[RAPPEL] Ligne extraite :\n%s", tab1);
+void decompose_line(char *temp_ligne, char **tab_off){  // temp_ligne = tableau temporaire contenant la ligne, tab_off = tableau séparant les 3 types de la ligne
+    printf("[RAPPEL] Ligne extraite :\n%s", temp_ligne);
     printf("--------------\n");
     FILE *fileptr;
     // Ouverture du fichier
@@ -170,22 +170,21 @@ void decompose_line(char *tab1, char **tab2){  // Un tableau comportant la ligne
         printf("Erreur d'ouverture du fichier\n");
     }
 
-    // Lecture du fichier + stockage dans la première ligne du tableau tab2
+    // Lecture du fichier + stockage de la ligne
     if (fileptr != NULL) {
-        char line[100];
         char *token;
-        int i = 0;
-        while (fgets(tab2[0], sizeof(line), tab1) != NULL) {
-            token = strtok(line, "\t");
-            strcpy(tab2[0], token);
-            i++;
-        }
-        printf("%s", line);
+        token = strtok(temp_ligne, "\t");
+        strcpy(tab_off[0], token);  // On récupère le premier type
+        token = strtok(NULL, "\t");
+        strcpy(tab_off[1], token);  // On récupère le deuxième type
+        token = strtok(NULL, "\t");
+        strcpy(tab_off[2], token);  // On récupère le troisième type
     }
 
     // Fermeture du fichier
     fclose(fileptr);
 }
+
 
 int Nature_Ligne_3(char **tab){
     char *token;
