@@ -193,7 +193,17 @@ int main()
     printf("Separation :\n");
     printf("tab_off[0] = %s\n", tab_off[0]);
     printf("tab_off[1] = %s\n", tab_off[1]);
-    printf("tab_off[2] = %s\n", tab_off[2]);
+    printf("tab_off[2] = %s", tab_off[2]);
+    printf("--------------\n");
+    if (nature_line(tab_off) == 1){
+        printf("Type : Verbe\n");
+    } else if (nature_line(tab_off) == 2){
+        printf("Type : Nom\n");
+    } else if (nature_line(tab_off) == 3){
+        printf("Type : Adjectif\n");
+    } else {
+        printf("Type : Inconnu\n");
+    }
 
 
     printf("\n");
