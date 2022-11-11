@@ -189,8 +189,12 @@ int main()
     extract_line(temp_ligne, number_line);  // Extraction de la ligne
     printf("\n--------------\nLigne numero %d :\n%s", number_line, temp_ligne);
     printf("--------------\n");
-    decompose_line(temp_ligne, tab_off);
-    printf("%s\n%s\n%s\n", tab_off[0], tab_off[1], tab_off[2]);
+    decompose_line(temp_ligne, tab_off);  // temp_ligne = tableau temporaire contenant la ligne, tab_off = tableau séparant les 3 types de la ligne
+    printf("Separation :\n");
+    printf("tab_off[0] = %s\n", tab_off[0]);
+    printf("tab_off[1] = %s\n", tab_off[1]);
+    printf("tab_off[2] = %s\n", tab_off[2]);
+
 
     printf("\n");
 
