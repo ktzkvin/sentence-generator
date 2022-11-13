@@ -140,7 +140,7 @@ int **extract_column_3(){
     return (int **) text;
 }
 
-void extract_line(char *tab, int line_number){
+void extract_line(char *tab){
     FILE *fileptr;
     // Ouverture du fichier
     fileptr = fopen("dico_10_lignes.txt", "r");
@@ -150,10 +150,8 @@ void extract_line(char *tab, int line_number){
     }
     // Lecture du fichier + stockage de la ligne dans un tableau de caractères 1D
     if (fileptr != NULL) {
-        while (line_number != 0){  // On se place sur la ligne voulue
             fgets(tab, 100, fileptr);  // On récupère la ligne => fgets(tab à remplir, taille max de tab, fichier ouvert)
-            line_number--;
-        }
+
     }
     // Fermeture du fichier
     fclose(fileptr);
@@ -177,6 +175,7 @@ void decompose_line(char *temp_ligne, char **tab_off){  // temp_ligne = tableau 
         strcpy(tab_off[1], token);  // On récupère le deuxième type
         token = strtok(NULL, "\t");
         strcpy(tab_off[2], token);  // On récupère le troisième type
+        tab_off[2][strlen(tab_off[2]) - 1] = '\0';
     }
 
     // Fermeture du fichier
@@ -186,8 +185,8 @@ void decompose_line(char *temp_ligne, char **tab_off){  // temp_ligne = tableau 
 
 int nature_line(char **tab){
     char *token;
-    token = strtok(tab[2], "\t");
-    if (strncmp(token, "Ver", 3) == 0){
+    token = strtok(tab[2], "\t"); // strtok permet de d'extraire une partie de la ligne par les tabulations
+    if (strncmp(token, "Ver", 3) == 0){  // strncmp permet de comparer les deux chaînes de caractères
         return 1;
     }
     else if (strncmp(token, "Nom", 3) == 0){
@@ -203,3 +202,60 @@ int nature_line(char **tab){
         return 0;
     }
 }
+
+p_cell child_horiz(p_cell cell, char letter){  // On parcourt la liste horizontale de la cellule pour verifier si la lettre existe déjà
+    // Si la lettre n'existe pas, on créera un fils de la cellule avec cette lettre
+    // Sinon, on renvoie le pointeur de la cellule qui contient cette lettre
+    p_cell temp = cell;
+    while (temp != NULL){
+        if (temp->p_node->letter == letter){
+            return (p_cell) temp->p_node;
+        }
+        temp = temp->p_node->son;
+    }
+    return NULL;
+}
+
+void parcourir_le_dico(p_letter_node root, int type){
+    char *dico = "dictionnaire.txt";
+    char **tab_off = malloc(100 * sizeof(char));  // Création d'un tableau pour séparer les 3 types d'une ligne dans un tableau en 3 lignes
+    for (int i = 0; i < 100; i++) {
+        tab_off[i] = malloc(3 * sizeof(char));
+    }
+    FILE *fileptr = fopen(dico,"r");
+    // Problème lors de la lecture du fichier
+    if (fileptr == NULL) {
+        printf("Erreur d'ouverture du fichier\n");
+    }else{
+        char buf[200];
+        while (fgets(buf, sizeof buf, fileptr) != NULL){
+            decompose_line(buf, tab_off);
+
+            if ((nature_line(tab_off) == type)){  // Création de l'arbre pour tous les types (type = 1 => verbe par ex)
+                printf("%s  ", tab_off[0]);
+                printf("%s  ", tab_off[1]);
+                printf("%s\n", tab_off[2]);
+                // Création de l'arbre
+                // si arbre vide => create_son
+                // si arbre non vide => vérifier si la lettre existe déjà dans l'arbre
+                // si la lettre existe déjà => ça renvoie le pointeur de son enfant de cette lettre => revérifier si la lettre suivante existe etc.
+                // si la lettre n'existe pas => create_son de la lettre
+
+                if (child_horiz(root, tab_off[1][0]) == NULL){
+                    create_son(root, tab_off[1][0]);
+                } else{
+                    p_cell temp = child_horiz(root, tab_off[1][0]);
+                    for (int i = 1; i < strlen(tab_off[1]); i++){
+                        if (child_horiz(temp, tab_off[1][i]) == NULL){
+                            create_son(temp, tab_off[1][i]);
+                        } else{
+                            temp = child_horiz(temp, tab_off[1][i]);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    fclose(fileptr);
+}
+
