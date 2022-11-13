@@ -19,24 +19,24 @@ p_cell create_son(p_cell son, char letter){
     return son;
 }
 
-void add_son(p_letter_node node, char letter){  // Ajoute un fils à un noeud
+void add_son(p_letter_node node, char letter){   // Ajoute un fils à un noeud
     if(node->son == NULL){
         p_cell temporary = create_son(temporary,letter);
         node->son = temporary;
     }
     else{
         p_cell temp = node->son;
-        int found = 0;
-        while(temp->next != NULL && found == 0){
+        int var = 0;
+        while(temp->next != NULL && var == 0){
             if(letter == temp->p_node->letter){
-                found = 1;
+                var = 1;
             }else{
                 temp = temp->next;
             }
         }
-        if(found == 0){
+        if(var == 0){
             if(letter == temp->p_node->letter){
-                found = 1;
+                var = 1;
             }else{
                 temp->next = create_son(temp->next,letter);
             }
@@ -44,7 +44,7 @@ void add_son(p_letter_node node, char letter){  // Ajoute un fils à un noeud
     }
 }
 
-void add_word(p_letter_node node, char * word){
+void add_word(p_letter_node node, char * word){  // Ajoute un mot à l'arbre
     if(word[0] == '\0'){
         return;
     }
@@ -74,3 +74,4 @@ void display_tree(p_letter_node node, char * word){
         temp = temp->next;
     }
 }
+
