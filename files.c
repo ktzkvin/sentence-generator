@@ -4,54 +4,6 @@
 #include "files.h"
 
 #define MAX_BUFFER 1000
-int OpenFile()
-{
-    FILE *fileptr;
-    int *text = malloc(MAX_BUFFER * sizeof(char));
-
-    // Ouverture du fichier
-    fileptr = fopen("dico_10_lignes.txt", "r");
-
-    // Problème lors de la lecture du fichier
-    if (fileptr == NULL)
-    {
-        printf("Erreur d'ouverture du fichier\n");
-        return 1;
-    }
-
-    // Lecture du fichier caractère par caractère
-    int c, i = 0;
-    int text2[100];
-    while (((c = fgetc(fileptr)) != EOF) && (c != '\t')){
-        text2[i] = c;
-        i++;
-    }
-    for (int j = 0; j < i; j++){
-        printf("%c", text2[j]);
-    }
-
-    // Fermeture du fichier
-    fclose(fileptr);
-    // Retourne le tableau de caractères
-    //return text;
-    return 0;
-}
-
-// La fonction OpenFile_1() retourne un tableau de caractères 2D text[100][100]
-// Elle doit ouvrir le fichier dico_10_lignes.txt et stocker seulement la première colonne limitée par une tabulation \t
-// A chaque nouvelle ligne du fichier, on passe à la ligne suivante du tableau de caractères
-// Exemple : pour les deux premières lignes:
-//stabilimetre	stabilimetre	Nom:Mas+SG
-//stabilisaient	stabiliser	Ver:IImp+PL+P3
-// Le tableau de caractères devra être :
-// text[0] = "stabilimetre" soit text[0][0] = 's', text[0][1] = 't', text[0][2] = 'a', text[0][3] = 'b', text[0][4] = 'i', text[0][5] = 'l', text[0][6] = 'i', text[0][7] = 'm', text[0][8] = 'e', text[0][9] = 't', text[0][10] = 'r', text[0][11] = 'e'
-// text[1] = "stabilisaient" soit text[1][0] = 's', text[1][1] = 't', text[1][2] = 'a', text[1][3] = 'b', text[1][4] = 'i', text[1][5] = 'l', text[1][6] = 'i', text[1][7] = 's', text[1][8] = 'a', text[1][9] = 'i', text[1][10] = 'e', text[1][11] = 'n', text[1][12] = 't'
-
-// maintenant je veux que ces fonctions soient des int et non des void
-// Je dois donc prendre en paramètre un tableau de caractères 2D text[100][100]
-// et le remplir avec les lignes du fichier dico_10_lignes.txt
-// La fonction OpenFile_1() doit remplir le tableau de caractères 2D text[100][100] avec la première colonne du fichier dico_10_lignes.txt
-// La fonction OpenFile_2() doit remplir le tableau de caractères 2D text[100][100] avec la deuxième colonne du fichier dico_10_lignes.txt
 
 int **extract_column_1(){
     FILE *fileptr;
@@ -171,6 +123,7 @@ void decompose_line(char *temp_ligne, char **tab_off){  // temp_ligne = tableau 
         char *token;
         token = strtok(temp_ligne, "\t");
         strcpy(tab_off[0], token);  // On récupère le premier type
+        // strcpy permet de copier une chaîne de caractères dans un tableau de caractères
         token = strtok(NULL, "\t");
         strcpy(tab_off[1], token);  // On récupère le deuxième type
         token = strtok(NULL, "\t");
@@ -203,21 +156,26 @@ int nature_line(char **tab){
     }
 }
 
-p_cell child_horiz(p_cell cell, char letter){  // On parcourt la liste horizontale de la cellule pour verifier si la lettre existe déjà
-    // Si la lettre n'existe pas, on créera un fils de la cellule avec cette lettre
-    // Sinon, on renvoie le pointeur de la cellule qui contient cette lettre
+p_cell child_horiz(p_cell cell, char letter){  // On parcourt la liste horizontale des fils d'un noeud en paramètre appelé cell pour trouver la lettre en paramètre appelée letter
     p_cell temp = cell;
     while (temp != NULL){
         if (temp->p_node->letter == letter){
-            return (p_cell) temp->p_node;
+            return temp;
         }
-        temp = temp->p_node->son;
+        temp = temp->next;
     }
-    return NULL;
+    // Si on arrive ici, c'est que la lettre n'existe pas
+    // On créé donc un fils avec cette lettre
+    p_cell new_cell = malloc(sizeof(t_cell));
+    new_cell->p_node = malloc(sizeof(t_letter_node));
+    new_cell->p_node->letter = letter;
+    new_cell->p_node->son = NULL;
+    new_cell->next = cell;
+    return new_cell;
 }
 
 void parcourir_le_dico(p_letter_node root, int type){
-    char *dico = "dictionnaire.txt";
+    char *dico = "dico_10_lignes.txt";
     char **tab_off = malloc(100 * sizeof(char));  // Création d'un tableau pour séparer les 3 types d'une ligne dans un tableau en 3 lignes
     for (int i = 0; i < 100; i++) {
         tab_off[i] = malloc(3 * sizeof(char));
@@ -231,7 +189,7 @@ void parcourir_le_dico(p_letter_node root, int type){
         while (fgets(buf, sizeof buf, fileptr) != NULL){
             decompose_line(buf, tab_off);
 
-            if ((nature_line(tab_off) == type)){  // Création de l'arbre pour tous les types (type = 1 => verbe par ex)
+            if ((nature_line(tab_off) == type)) {  // Création de l'arbre pour tous les types (type = 1 => verbe par ex)
                 printf("%s  ", tab_off[0]);
                 printf("%s  ", tab_off[1]);
                 printf("%s\n", tab_off[2]);
@@ -241,18 +199,42 @@ void parcourir_le_dico(p_letter_node root, int type){
                 // si la lettre existe déjà => ça renvoie le pointeur de son enfant de cette lettre => revérifier si la lettre suivante existe etc.
                 // si la lettre n'existe pas => create_son de la lettre
 
-                if (child_horiz(root, tab_off[1][0]) == NULL){
-                    create_son(root, tab_off[1][0]);
-                } else{
-                    p_cell temp = child_horiz(root, tab_off[1][0]);
-                    for (int i = 1; i < strlen(tab_off[1]); i++){
-                        if (child_horiz(temp, tab_off[1][i]) == NULL){
-                            create_son(temp, tab_off[1][i]);
-                        } else{
-                            temp = child_horiz(temp, tab_off[1][i]);
-                        }
-                    }
+
+                // Création de l'arbre Verbes (type = 1) avec les verbes basiques (tab_off[1] = infinitif) pour chaque ligne du dictionnaire
+                // On vérifie pour chaque lettre du mot si elle existe déjà dans l'arbre avec la fonction child_horiz qui retourne le pointeur de la lettre
+                // Si la lettre n'existe pas, child_horiz créé un fils avec cette lettre
+
+                // sachant que les structures sont :
+                //typedef struct s_letter_node t_letter_node, *p_letter_node ;
+                //
+                //typedef struct s_cell
+                //{
+                //    p_letter_node p_node ;  // Lettre du fils
+                //    struct s_cell * next ;  // Lettre à droite = frère
+                //} t_cell, *p_cell ;
+                //
+                //struct s_letter_node
+                //{
+                //    char letter ;
+                //    p_cell son ;
+                //};
+                //
+                //typedef struct s_tree
+                //{
+                //    t_letter_node *root;
+                //} t_tree, *p_tree;
+
+                // Création de l'arbre
+                t_tree Noms;
+                Noms.root = malloc(sizeof(t_letter_node));
+                Noms.root->letter = tab_off[1][0];
+                Noms.root->son = NULL;
+                p_cell temp = Noms.root->son;
+                for (int i = 1; i < strlen(tab_off[1]); i++){
+                    temp = child_horiz(temp, tab_off[1][i]);
                 }
+
+
             }
         }
     }
