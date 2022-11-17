@@ -59,19 +59,21 @@ t_tree create_tree(){
     return tree;
 }
 
-void display_tree(p_letter_node node, char * word){
+// Créer une fonction display_tree qui affiche l'arbre de la façon suivante:
+// Afficher toutes les lettres se trouvant dans l'arbre mis en paramètre
+
+void display_tree(p_letter_node node){
     if(node->son == NULL){
-        printf("%s",word);
-        return;
-    }
-    p_cell temp = node->son;
-    while(temp != NULL){
-        char * new_word = malloc(sizeof(char)*(strlen(word)+2));
-        strcpy(new_word,word);
-        new_word[strlen(word)] = temp->p_node->letter;
-        new_word[strlen(word)+1] = '\0';
-        display_tree(temp->p_node,new_word);
-        temp = temp->next;
+        printf("%c",node->letter);
+    }else{
+        p_cell temp = node->son;
+        if(temp != NULL){
+            printf("%c",temp->p_node->letter);
+            display_tree(temp->p_node);
+        }
+        if(temp->next != NULL){
+            temp = temp->next;
+            display_tree(temp->p_node);
+        }
     }
 }
-
