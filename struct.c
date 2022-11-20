@@ -62,18 +62,12 @@ t_tree create_tree(){
 // Créer une fonction display_tree qui affiche l'arbre de la façon suivante:
 // Afficher toutes les lettres se trouvant dans l'arbre mis en paramètre
 
-void display_tree(p_letter_node node){
-    if(node->son == NULL){
-        printf("%c",node->letter);
-    }else{
-        p_cell temp = node->son;
-        if(temp != NULL){
-            printf("%c",temp->p_node->letter);
-            display_tree(temp->p_node);
-        }
-        if(temp->next != NULL){
-            temp = temp->next;
-            display_tree(temp->p_node);
-        }
+void display_tree(t_tree tree){
+    // Afficher toutes les lettres se trouvant dans l'arbre mis en paramètre
+    p_cell temp = tree.root->son;
+    while(temp != NULL){
+        printf("%c",temp->p_node->letter);
+        temp = temp->next;
     }
+
 }
