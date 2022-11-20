@@ -3,15 +3,11 @@
 #include "struct.h"
 #include "files.h"
 
-// Créer une fonction qui ouvre un fichier, l'extrait et le stocke dans un tableau de caractères
-int OpenFile();
-void OpenFile_1();
-void OpenFile_2();
 int **extract_column_1();
 int **extract_column_2();
-int **extract_column_3();
+void genre_line(char *, char *, int);
 void extract_line(char *);
-void decompose_line(char *, char **);
+void decompose_line(char *, char **, char *);
 int nature_line(char **);
 
 #endif //SENTENCE_GENERATOR_FILES_H
