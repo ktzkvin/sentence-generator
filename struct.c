@@ -91,3 +91,20 @@ p_cell verif_present(p_letter_node cell, char elements) {  // Vérifie si une le
         }
     }
 }
+
+struct s_letter_node* add_letter (struct s_letter_node* cell, char elements) {  // Ajoute une lettre à un noeud
+    p_cell temp = cell->son;
+    if (temp == NULL) {
+        create_son(temp, elements);
+        return temp;
+    } else {
+        do {
+            if (temp->p_node->letter == elements) {
+                return temp;
+            }
+            temp = temp->next;
+        } while (temp->next != NULL);
+        create_son(temp, elements);
+        return temp;
+    }
+}
