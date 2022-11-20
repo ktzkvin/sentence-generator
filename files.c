@@ -62,7 +62,7 @@ int **extract_column_2(){
     return (int **) text;
 }
 
-void genre_line(char *temp_ligne, char *tab_off, int var){
+void article_line(char *temp_ligne, char *tab_off, int var){
     // extraction de la 3ème colonne de temp_ligne dans tab_off
     int voyelle = 0;
     // Vérifier sii le mot commence par une voyelle:
@@ -121,6 +121,15 @@ void genre_line(char *temp_ligne, char *tab_off, int var){
                 printf("les ");
             }
         }
+        if (strcmp(tab_off, "InvGen+SG") == 0){
+            if (var == 1){
+                printf("Le ");
+            }
+            else{
+                printf("le ");
+            }
+        }
+
     }
     else{  // Si le mot commence par une consonne
         // retourner 1 si le genre est masculin singulier de la forme "Mas+Sg"
@@ -157,6 +166,14 @@ void genre_line(char *temp_ligne, char *tab_off, int var){
             }
             else{
                 printf("les ");
+            }
+        }
+        if (strcmp(tab_off, "InvGen+SG") == 0){
+            if (var == 1){
+                printf("Le ");
+            }
+            else{
+                printf("le ");
             }
         }
     }
