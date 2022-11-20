@@ -26,6 +26,7 @@ void add_son(p_letter_node, char);  // Ajoute un fils à un noeud
 void add_word(p_letter_node, char*);  // Ajoute un mot à l'arbre
 void display_tree(t_tree);  // Affiche l'arbre
 p_cell verif_present(p_letter_node, char);  // Vérifie si une lettre est présente parmi les fils d'un noeud
+struct s_letter_node* add_letter (struct s_letter_node*, char);  // Ajoute une lettre à un noeud version 2
 
 
 #endif //SENTENCE_GENERATOR_STRUCT_H
