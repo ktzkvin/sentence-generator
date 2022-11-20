@@ -9,99 +9,52 @@
 int main()
 {
     char *temp_ligne = malloc(100 * sizeof(char));  // Création d'un tableau temporaire pour enregistrer une ligne
+    char *temp_ligne_2 = malloc(100 * sizeof(char));  // Création d'un tableau temporaire pour enregistrer une ligne
+
 
     char **tab_off = malloc(100 * sizeof(char));  // Création d'un tableau pour séparer les 3 types d'une ligne dans un tableau en 3 lignes
     for (int i = 0; i < 100; i++) {
         tab_off[i] = malloc(3 * sizeof(char));
     }
 
-    int number_line = 6;  // Numéro de la ligne du fichier
-    extract_line(temp_ligne);  // Extraction de la ligne
-    printf("--------------\n");
-
-    decompose_line(temp_ligne, tab_off);  // temp_ligne = tableau temporaire contenant la ligne, tab_off = tableau séparant les 3 types de la ligne
-    printf("Ligne %d : %s\n", number_line, temp_ligne);
-    printf("Separation :\n");
-    printf("tab_off[0] = %s\n", tab_off[0]);
-    printf("tab_off[1] = %s\n", tab_off[1]);
-    printf("tab_off[2] = %s\n", tab_off[2]);
-    printf("--------------\n");
-    if (nature_line(tab_off) == 1){
-        printf("Type : Verbe\n");
-    } else if (nature_line(tab_off) == 2){
-        printf("Type : Nom\n");
-    } else if (nature_line(tab_off) == 3){
-        printf("Type : Adjectif\n");
-    } else {
-        printf("Type : Inconnu\n");
-    }
-
-
-    // Création de l'arbre avec le dico_10_lignes.txt
-    // Création de l'arbre des verbes :
-    t_tree tree_verbs = create_tree();
-    p_letter_node tmp = tree_verbs.root;
-    // -> vérifie le type de la ligne tab_off[2] si = Ver
-    // -> ajoute la forme de base dans l'arbre (= tab_off[1])
-    add_word(tmp, tab_off[1]);
-    // -> affiche l'arbre
-
-    number_line = 11;  // Numéro de la ligne du fichier
-    extract_line(temp_ligne);  // Extraction de la ligne
-    printf("\n--------------\nLigne numero %d :\n%s", number_line, temp_ligne);
-    printf("--------------\n");
-    decompose_line(temp_ligne, tab_off);  // temp_ligne = tableau temporaire contenant la ligne, tab_off = tableau séparant les 3 types de la ligne
-    printf("Separation :\n");
-    printf("tab_off[0] = %s\n", tab_off[0]);
-    printf("tab_off[1] = %s\n", tab_off[1]);
-    printf("tab_off[2] = %s\n", tab_off[2]);
-    printf("--------------\n");
-    if (nature_line(tab_off) == 1){
-        printf("Type : Verbe\n");
-    } else if (nature_line(tab_off) == 2){
-        printf("Type : Nom\n");
-    } else if (nature_line(tab_off) == 3){
-        printf("Type : Adjectif\n");
-    } else {
-        printf("Type : Inconnu\n");
-    }
-
-
-
-
-
-    printf("--------------------\n");
-
-
-    int nombreAleatoire = 0;
+    int nombreAleatoire;
     const int MAX = 287976, MIN = 1;
     srand(time(NULL));
-    nombreAleatoire = (rand() % (MAX - MIN + 1)) + MIN;
+    char *tab_column_3;  // Création d'un tableau pour séparer les 3 types d'une ligne dans un tableau en 3 lignes
+    for (int i = 0; i < 100; i++) {
+        tab_column_3 = malloc(3 * sizeof(char));
+    }
 
     while (nature_line(tab_off) != 2) {
         nombreAleatoire = (rand() % (MAX - MIN + 1)) + MIN;
         extract_line2(temp_ligne, nombreAleatoire);
-        decompose_line(temp_ligne, tab_off);
+
+        decompose_line(temp_ligne, tab_off, temp_ligne_2);
     }
-    printf("%s\t", tab_off[0]);
+    genre_line(temp_ligne_2, tab_column_3, 1);  // Vérifier le genre et le nombre
+    printf("%s ", tab_off[0]);
+
     while (nature_line(tab_off) != 3) {
         nombreAleatoire = (rand() % (MAX - MIN + 1)) + MIN;
         extract_line2(temp_ligne, nombreAleatoire);
-        decompose_line(temp_ligne, tab_off);
+        decompose_line(temp_ligne, tab_off, temp_ligne_2);
     }
-    printf("%s\t", tab_off[0]);
+    printf("%s ", tab_off[0]);
     while (nature_line(tab_off) != 1) {
         nombreAleatoire = (rand() % (MAX - MIN + 1)) + MIN;
         extract_line2(temp_ligne, nombreAleatoire);
-        decompose_line(temp_ligne, tab_off);
+        decompose_line(temp_ligne, tab_off, temp_ligne_2);
     }
-    printf("%s\t", tab_off[0]);
+    printf("%s ", tab_off[0]);
     while (nature_line(tab_off) != 2) {
         nombreAleatoire = (rand() % (MAX - MIN + 1)) + MIN;
         extract_line2(temp_ligne, nombreAleatoire);
-        decompose_line(temp_ligne, tab_off);
+        decompose_line(temp_ligne, tab_off, temp_ligne_2);
     }
-    printf("%s\t", tab_off[0]);
+    genre_line(temp_ligne_2, tab_column_3, 0);  // Vérifier le genre et le nombre
+    printf("%s \n", tab_off[0]);
+
+
 
 
 
