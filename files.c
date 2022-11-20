@@ -62,31 +62,31 @@ int **extract_column_2(){
     return (int **) text;
 }
 
-void article_line(char *temp_ligne, char *tab_off, int var){
-    // extraction de la 3ème colonne de temp_ligne dans tab_off
+void article_line(char *temp_ligne, char *tab_vide, int var){
     int voyelle = 0;
-    // Vérifier sii le mot commence par une voyelle:
+    // Vérifier si le mot commence par une voyelle:
     if (temp_ligne[0] == 'a' || temp_ligne[0] == 'e' || temp_ligne[0] == 'i' || temp_ligne[0] == 'o' || temp_ligne[0] == 'u' || temp_ligne[0] == 'y' || temp_ligne[0] == 'h'){
         voyelle = 1;
     }
+    // extraction de la 3ème colonne de temp_ligne dans tab_off
     char *token;
     token = strtok(temp_ligne, "\t");
     token = strtok(NULL, "\t");
     token = strtok(NULL, "\t");
-    strcpy(tab_off, token);
+    strcpy(tab_vide, token);
 
     // tab_off est maintenant de la forme Type:Genre+Accord
-    // on veut récupérer le genre
-    token = strtok(tab_off, ":");
+    // on veut récupérer l'accord
+    token = strtok(tab_vide, ":");
     token = strtok(NULL, ":");
     // token est maintenant de la forme Genre+Accord
     // Il faut supprimer le \n
     token[strlen(token)-1] = '\0';
-    strcpy(tab_off, token);
+    strcpy(tab_vide, token);
 
     if (voyelle == 1){  // Si le mot commence par une voyelle
         // retourner 1 si le genre est masculin singulier de la forme "Mas+Sg"
-        if (strcmp(tab_off, "Mas+SG") == 0){
+        if (strcmp(tab_vide, "Mas+SG") == 0){
             if (var == 1){
                 printf("L'");
             }
@@ -95,7 +95,7 @@ void article_line(char *temp_ligne, char *tab_off, int var){
             }
         }
         // retourner 2 si le genre est féminin singulier de la forme "Fem+Sg"
-        if (strcmp(tab_off, "Fem+SG") == 0){
+        if (strcmp(tab_vide, "Fem+SG") == 0){
             if (var == 1){
                 printf("L'");
             }
@@ -104,7 +104,7 @@ void article_line(char *temp_ligne, char *tab_off, int var){
             }
         }
         // retourner 3 si le genre est masculin pluriel de la forme "Mas+Pl"
-        if (strcmp(tab_off, "Mas+PL") == 0){
+        if (strcmp(tab_vide, "Mas+PL") == 0){
             if (var == 1){
                 printf("Les ");
             }
@@ -113,7 +113,7 @@ void article_line(char *temp_ligne, char *tab_off, int var){
             }
         }
         // retourner 4 si le genre est féminin pluriel de la forme "Fem+Pl"
-        if (strcmp(tab_off, "Fem+PL") == 0){
+        if (strcmp(tab_vide, "Fem+PL") == 0){
             if (var == 1){
                 printf("Les ");
             }
@@ -121,19 +121,42 @@ void article_line(char *temp_ligne, char *tab_off, int var){
                 printf("les ");
             }
         }
-        if (strcmp(tab_off, "InvGen+SG") == 0){
+        if (strcmp(tab_vide, "InvGen+SG") == 0){
             if (var == 1){
-                printf("Le ");
+                printf("L'");
             }
             else{
-                printf("le ");
+                printf("l'");
             }
         }
-
+        if (strcmp(tab_vide, "InvGen+PL") == 0){
+            if (var == 1){
+                printf("Les ");
+            }
+            else{
+                printf("les ");
+            }
+        }
+        if (strcmp(tab_vide, "Fem+InvPL") == 0){
+            if (var == 1){
+                printf("Les ");
+            }
+            else{
+                printf("les ");
+            }
+        }
+        if (strcmp(tab_vide, "Mas+InvPL") == 0){
+            if (var == 1){
+                printf("Les ");
+            }
+            else{
+                printf("les ");
+            }
+        }
     }
     else{  // Si le mot commence par une consonne
         // retourner 1 si le genre est masculin singulier de la forme "Mas+Sg"
-        if (strcmp(tab_off, "Mas+SG") == 0){
+        if (strcmp(tab_vide, "Mas+SG") == 0){
             if (var == 1){
                 printf("Le ");
             }
@@ -142,7 +165,7 @@ void article_line(char *temp_ligne, char *tab_off, int var){
             }
         }
         // retourner 2 si le genre est féminin singulier de la forme "Fem+Sg"
-        if (strcmp(tab_off, "Fem+SG") == 0){
+        if (strcmp(tab_vide, "Fem+SG") == 0){
             if (var == 1){
                 printf("La ");
             }
@@ -151,7 +174,7 @@ void article_line(char *temp_ligne, char *tab_off, int var){
             }
         }
         // retourner 3 si le genre est masculin pluriel de la forme "Mas+Pl"
-        if (strcmp(tab_off, "Mas+PL") == 0){
+        if (strcmp(tab_vide, "Mas+PL") == 0){
             if (var == 1){
                 printf("Les ");
             }
@@ -160,7 +183,7 @@ void article_line(char *temp_ligne, char *tab_off, int var){
             }
         }
         // retourner 4 si le genre est féminin pluriel de la forme "Fem+Pl"
-        if (strcmp(tab_off, "Fem+PL") == 0){
+        if (strcmp(tab_vide, "Fem+PL") == 0){
             if (var == 1){
                 printf("Les ");
             }
@@ -168,7 +191,7 @@ void article_line(char *temp_ligne, char *tab_off, int var){
                 printf("les ");
             }
         }
-        if (strcmp(tab_off, "InvGen+SG") == 0){
+        if (strcmp(tab_vide, "InvGen+SG") == 0){
             if (var == 1){
                 printf("Le ");
             }
@@ -176,8 +199,56 @@ void article_line(char *temp_ligne, char *tab_off, int var){
                 printf("le ");
             }
         }
+        if (strcmp(tab_vide, "InvGen+PL") == 0){
+            if (var == 1){
+                printf("Le ");
+            }
+            else{
+                printf("le ");
+            }
+        }
+        if (strcmp(tab_vide, "Fem+InvPL") == 0){
+            if (var == 1){
+                printf("Les ");
+            }
+            else{
+                printf("les ");
+            }
+        }
+        if (strcmp(tab_vide, "Mas+InvPL") == 0){
+            if (var == 1){
+                printf("Les ");
+            }
+            else{
+                printf("les ");
+            }
+        }
     }
 
+}
+
+int adj_ligne(char *tab_types_adj, char *tab_types_nom){
+    printf("  tab_types_adj : %s\n", tab_types_adj);
+    printf("  tab_types_nom : %s\n\n", tab_types_nom);
+    // tab_types_adj et tab_types_nom sont de la forme "Type:Genre+Accord"
+    // je veux comparer les deux pour savoir si le genre+accord est le même
+    // si c'est le cas, on retourne 1
+    // sinon, on retourne 0
+    char temp_tab[100];
+    char temp_tab2[100];
+    strcpy(temp_tab, tab_types_adj);
+    strcpy(temp_tab2, tab_types_nom);
+    char *token = strtok(temp_tab, ":");
+    token = strtok(NULL, ":");
+
+    printf("1) %s\n", token);
+    printf("2) %s\n", tab_types_nom);
+    if (strcmp(token, tab_types_nom) == 0){
+        return 1;
+    }
+    else{
+        return 0;
+    }
 }
 
 void extract_line(char *tab){
@@ -320,12 +391,14 @@ void parcourir_le_dico(p_letter_node root){
     // Problème lors de la lecture du fichier
     if (fileptr == NULL) {
         printf("Erreur d'ouverture du fichier\n");
+
     } else {
         char buf[200];
         while (fgets(buf, sizeof buf, fileptr) != NULL) {
+            printf("%s", buf);
             decompose_line(buf, tab_off, buf);
-
             if(nature_line(tab_off) == 2) {
+                printf("Nom");
                 // Création de l'arbre Nom
                 t_tree Noms;
                 if (Noms.root == NULL) {
@@ -342,50 +415,48 @@ void parcourir_le_dico(p_letter_node root){
                 }
             }
             if(nature_line(tab_off) == 3) {
-                {
-                    printf("Adjectif");
-                    // Création de l'arbre Adjectif
-                    t_tree Adjectifs;
-                    if (Adjectifs.root == NULL) {
-                        Adjectifs.root = malloc(sizeof(t_letter_node));
-                        Adjectifs.root->letter = tab_off[1][0];
-                        Adjectifs.root->son = NULL;
-                        cpt++;
-                    } else {
-                        p_letter_node temp = Adjectifs.root;
-                        for (int cpt; cpt < strlen(tab_off[1]); cpt++) {
-                            p_cell arbre = verif_present(temp, tab_off[1][cpt]);
-                            temp = arbre->p_node;
-                        }
+                printf("Adjectif");
+                // Création de l'arbre Adjectif
+                t_tree Adjectifs;
+                if (Adjectifs.root == NULL) {
+                    Adjectifs.root = malloc(sizeof(t_letter_node));
+                    Adjectifs.root->letter = tab_off[1][0];
+                    Adjectifs.root->son = NULL;
+                    cpt++;
+                } else {
+                    p_letter_node temp = Adjectifs.root;
+                    for (int cpt; cpt < strlen(tab_off[1]); cpt++) {
+                        p_cell arbre = verif_present(temp, tab_off[1][cpt]);
+                        temp = arbre->p_node;
                     }
                 }
             }
             if(nature_line(tab_off) == 4) {
-                {
-                    printf("Adv");
-                    // Création de l'arbre Adverbe
-                    t_tree Adverbes;
-                    if (Adverbes.root == NULL) {
-                        Adverbes.root = malloc(sizeof(t_letter_node));
-                        Adverbes.root->letter = tab_off[1][0];
-                        Adverbes.root->son = NULL;
-                        cpt++;
-                    } else {
-                        p_letter_node temp = Adverbes.root;
-                        for (int cpt; cpt < strlen(tab_off[1]); cpt++) {
-                            p_cell arbre = verif_present(temp, tab_off[1][cpt]);
-                            temp = arbre->p_node;
-                        }
+                printf("Adv");
+                // Création de l'arbre Adverbe
+                t_tree Adverbes;
+                if (Adverbes.root == NULL) {
+                    Adverbes.root = malloc(sizeof(t_letter_node));
+                    Adverbes.root->letter = tab_off[1][0];
+                    Adverbes.root->son = NULL;
+                    cpt++;
+                } else {
+                    p_letter_node temp = Adverbes.root;
+                    for (int cpt; cpt < strlen(tab_off[1]); cpt++) {
+                        p_cell arbre = verif_present(temp, tab_off[1][cpt]);
+                        temp = arbre->p_node;
                     }
                 }
             }
-            if(nature_line(tab_off)==1)
-            {
+
+            if(nature_line(tab_off)==1) {
                 // Création de l'arbre Verbes
+                printf("Verbe");
                 t_tree Verbes;
                 if (Verbes.root == NULL) {
                     Verbes.root = malloc(sizeof(t_letter_node));
                     Verbes.root->letter = tab_off[1][0];
+                    printf("[%c]", Verbes.root->letter);
                     Verbes.root->son = NULL;
                     cpt++;
                 } else {
