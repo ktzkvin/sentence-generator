@@ -4,7 +4,7 @@
 #include "struct.h"
 #include "files.h"
 
-p_letter_node create_node(p_letter_node node, char letter){
+p_letter_node create_node(p_letter_node node, char letter){  // Créer un noeud
     node = malloc(sizeof(t_letter_node));
     node->letter = letter;
     node->son = NULL;
@@ -12,7 +12,7 @@ p_letter_node create_node(p_letter_node node, char letter){
     return node;
 }
 
-p_cell create_son(p_cell son, char letter){
+p_cell create_son(p_cell son, char letter){  // Créer un fils
     son = malloc(sizeof(t_cell));
     son->p_node = create_node(son->p_node,letter);
     son->next = NULL;
@@ -59,8 +59,6 @@ t_tree create_tree(){
     return tree;
 }
 
-// Créer une fonction display_tree qui affiche l'arbre de la façon suivante:
-// Afficher toutes les lettres se trouvant dans l'arbre mis en paramètre
 
 void display_tree(t_tree tree){
     // Afficher toutes les lettres se trouvant dans l'arbre mis en paramètre
@@ -70,4 +68,26 @@ void display_tree(t_tree tree){
         temp = temp->next;
     }
 
+}
+
+p_cell verif_present(p_letter_node cell, char elements) {  // Vérifie si une lettre est présente parmi les fils d'un noeud
+    if (cell->son == NULL) {
+        create_son(cell, elements);
+        return cell->son;
+    } else {
+        p_letter_node temp = cell->son;
+        while (temp->son->next != NULL) {
+            if (temp->letter == elements) {
+                return temp;
+            } else {
+                temp->son->p_node = temp->son->next;
+            }
+        }
+        if (temp->letter == elements) {
+            return temp;
+        } else {
+            create_son(temp->son->next, elements);
+            return temp->son->next;
+        }
+    }
 }
