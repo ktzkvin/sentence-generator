@@ -2,10 +2,9 @@
 #include <stdio.h>
 #include <string.h>
 #include "files.h"
+#include "struct.h"
 
-#define MAX_BUFFER 1000
-
-int **extract_column_1(){
+int **extract_column_1(){  // Récupère la première colonne du fichier
     FILE *fileptr;
     char **text = malloc(100 * sizeof(char));
     for (int i = 0; i < 100; i++){
@@ -33,7 +32,7 @@ int **extract_column_1(){
     return (int **) text;
 }
 
-int **extract_column_2(){
+int **extract_column_2(){  // Récupère la deuxième colonne du fichier
     FILE *fileptr;
     char **text = malloc(100 * sizeof(char));
     for (int i = 0; i < 100; i++){
@@ -62,7 +61,7 @@ int **extract_column_2(){
     return (int **) text;
 }
 
-void article_line(char *temp_ligne, char *tab_vide, int var){
+void article_line(char *temp_ligne, char *tab_vide, int var){  // Vérifie le genre et le nombre pour afficher le bon article
     int voyelle = 0;
     // Vérifier si le mot commence par une voyelle:
     if (temp_ligne[0] == 'a' || temp_ligne[0] == 'e' || temp_ligne[0] == 'i' || temp_ligne[0] == 'o' || temp_ligne[0] == 'u' || temp_ligne[0] == 'y' || temp_ligne[0] == 'h'){
@@ -227,7 +226,7 @@ void article_line(char *temp_ligne, char *tab_vide, int var){
 
 }
 
-int adj_ligne(char *tab_types_adj, char *tab_types_nom){
+int adj_ligne(char *tab_types_adj, char *tab_types_nom){  // Vérifie si le mot est un adjectif
     printf("  tab_types_adj : %s\n", tab_types_adj);
     printf("  tab_types_nom : %s\n\n", tab_types_nom);
     // tab_types_adj et tab_types_nom sont de la forme "Type:Genre+Accord"
@@ -251,7 +250,7 @@ int adj_ligne(char *tab_types_adj, char *tab_types_nom){
     }
 }
 
-void extract_line(char *tab){
+void extract_line(char *tab){  // Récupère la ligne du mot dans le fichier
     FILE *fileptr;
     // Ouverture du fichier
     fileptr = fopen("dictionnaire.txt", "r");
@@ -269,7 +268,7 @@ void extract_line(char *tab){
 }
 
 
-void extract_line2(char *tab, int val){
+void extract_line2(char *tab, int val){  // Soit r un nombre aléatoire, on récupère la ligne r du fichier
     FILE *fileptr;
     int i = 0;
     // Ouverture du fichier
@@ -317,7 +316,7 @@ void decompose_line(char *temp_ligne, char **tab_off, char *temp_ligne_2){  // t
 }
 
 
-int nature_line(char **tab){
+int nature_line(char **tab){  // Vérifie si le mot est un nom, un verbe, un adjectif ou un adverbe
     char *token;
     token = strtok(tab[2], ":"); // strtok permet de d'extraire une partie de la ligne par les tabulations
     if (strcmp(token, "Ver") == 0){  // strncmp permet de comparer les deux chaînes de caractères
@@ -356,51 +355,28 @@ p_cell child_horiz(p_cell cell, char letter){  // On parcourt la liste horizonta
 }
 
 
-//vérifie si la lettre est présente dans la liste des fils du noeud
-//si oui, retourne le noeud fils correspondant
-//sinon, crée un nouveau noeud fils et retourner le fils de ce noeud
-p_cell verif_present (p_letter_node cell, char elements) {
-    if (cell->son == NULL) {
-        create_son(cell, elements);
-        return cell->son;
-    } else {
-        p_letter_node temp = cell->son;
-        while (temp->son->next != NULL) {
-            if (temp->letter == elements) {
-                return temp;
-            } else {
-                temp->son->p_node = temp->son->next;
-            }
-        }
-        if (temp->letter == elements) {
-            return temp;
-        } else {
-            create_son(temp->son->next, elements);
-            return temp->son->next;
-        }
-    }
-}
-void parcourir_le_dico(p_letter_node root){
+void parcourir_le_dico(){  // On parcourt le dictionnaire et on ajoute les mots dans l'arbre
     char *dico = "dictionnaire.txt";
     int cpt = 0;
     char **tab_off = malloc(100 * sizeof(char));  // Création d'un tableau pour séparer les 3 types d'une ligne dans un tableau en 3 lignes
     for (int i = 0; i < 100; i++) {
         tab_off[i] = malloc(3 * sizeof(char));
     }
+    t_tree Noms;
+    t_tree Verbes;
+    t_tree Adjectifs;
+    t_tree Adverbes;
     FILE *fileptr = fopen(dico, "r");
     // Problème lors de la lecture du fichier
     if (fileptr == NULL) {
         printf("Erreur d'ouverture du fichier\n");
-
     } else {
         char buf[200];
         while (fgets(buf, sizeof buf, fileptr) != NULL) {
             printf("%s", buf);
             decompose_line(buf, tab_off, buf);
             if(nature_line(tab_off) == 2) {
-                printf("Nom");
                 // Création de l'arbre Nom
-                t_tree Noms;
                 if (Noms.root == NULL) {
                     Noms.root = malloc(sizeof(t_letter_node));
                     Noms.root->letter = tab_off[1][0];
@@ -415,9 +391,7 @@ void parcourir_le_dico(p_letter_node root){
                 }
             }
             if(nature_line(tab_off) == 3) {
-                printf("Adjectif");
                 // Création de l'arbre Adjectif
-                t_tree Adjectifs;
                 if (Adjectifs.root == NULL) {
                     Adjectifs.root = malloc(sizeof(t_letter_node));
                     Adjectifs.root->letter = tab_off[1][0];
@@ -432,9 +406,7 @@ void parcourir_le_dico(p_letter_node root){
                 }
             }
             if(nature_line(tab_off) == 4) {
-                printf("Adv");
                 // Création de l'arbre Adverbe
-                t_tree Adverbes;
                 if (Adverbes.root == NULL) {
                     Adverbes.root = malloc(sizeof(t_letter_node));
                     Adverbes.root->letter = tab_off[1][0];
@@ -451,12 +423,15 @@ void parcourir_le_dico(p_letter_node root){
 
             if(nature_line(tab_off)==1) {
                 // Création de l'arbre Verbes
-                printf("Verbe");
-                t_tree Verbes;
+                // tab_off[1] contient le verbe
+                // tab_off[1][0] contient la première lettre du verbe, etc.
+                // On parcourt le verbe lettre par lettre, et on crée un arbre avec les lettres.
+                // Pour ça, on doit vérifier si la première lettre se trouve dans la liste des fils du noeud racine
+                // Si oui, on vérifie si la deuxième lettre se trouve dans la liste des fils du noeud fils de la première lettre etc
+                // Si non, on crée un noeud fils avec cette lettre
                 if (Verbes.root == NULL) {
                     Verbes.root = malloc(sizeof(t_letter_node));
                     Verbes.root->letter = tab_off[1][0];
-                    printf("[%c]", Verbes.root->letter);
                     Verbes.root->son = NULL;
                     cpt++;
                 } else {
@@ -466,9 +441,9 @@ void parcourir_le_dico(p_letter_node root){
                         temp = arbre->p_node;
                     }
                 }
-                display_tree(Verbes);
             }
         }
     }
     fclose(fileptr);
 }
+
