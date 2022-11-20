@@ -28,7 +28,7 @@ p_letter_node create_node(p_letter_node node, char letter);
 p_cell create_son(p_cell son, char letter);
 void add_son(p_letter_node node, char letter);
 void add_word(p_letter_node node, char * word);
-void display_tree(p_letter_node node, char * word);
+void display_tree(t_tree);
 
 
 #endif //SENTENCE_GENERATOR_STRUCT_H
