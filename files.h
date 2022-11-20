@@ -9,6 +9,6 @@ void extract_line2(char *, int);  // Soit r un nombre aléatoire, récupère la 
 void decompose_line(char *, char **, char *);  // Découpe une ligne en plusieurs colonnes
 int nature_line(char **);  // Récupère la nature d'une ligne
 int adj_ligne(char *, char *);  // Vérifie si l'adjectif est compatible avec le nom
-void parcourir_le_dico();  // Parcours le dictionnaire afin de créer les arbres
+void parcourir_le_dico();  // On parcourt le dictionnaire et on ajoute les mots dans l'arbre
 
 #endif //SENTENCE_GENERATOR_FILES_H
