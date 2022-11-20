@@ -12,7 +12,7 @@ int **extract_column_1(){
         text[i] = malloc(100 * sizeof(char));
     }
     // Ouverture du fichier
-    fileptr = fopen("dico_10_lignes.txt", "r");
+    fileptr = fopen("dictionnaire.txt", "r");
     // Problème lors de la lecture du fichier
     if (fileptr == NULL) {
         printf("Erreur d'ouverture du fichier\n");
@@ -40,7 +40,7 @@ int **extract_column_2(){
         text[i] = malloc(100 * sizeof(char));
     }
     // Ouverture du fichier
-    fileptr = fopen("dico_10_lignes.txt", "r");
+    fileptr = fopen("dictionnaire.txt", "r");
     // Problème lors de la lecture du fichier
     if (fileptr == NULL) {
         printf("Erreur d'ouverture du fichier\n");
@@ -62,47 +62,118 @@ int **extract_column_2(){
     return (int **) text;
 }
 
-int **extract_column_3(){
-    FILE *fileptr;
-    char **text = malloc(100 * sizeof(char));
-    for (int i = 0; i < 100; i++){
-        text[i] = malloc(100 * sizeof(char));
+void genre_line(char *temp_ligne, char *tab_off, int var){
+    // extraction de la 3ème colonne de temp_ligne dans tab_off
+    int voyelle = 0;
+    // Vérifier sii le mot commence par une voyelle:
+    if (temp_ligne[0] == 'a' || temp_ligne[0] == 'e' || temp_ligne[0] == 'i' || temp_ligne[0] == 'o' || temp_ligne[0] == 'u' || temp_ligne[0] == 'y' || temp_ligne[0] == 'h'){
+        voyelle = 1;
     }
-    // Ouverture du fichier
-    fileptr = fopen("dico_10_lignes.txt", "r");
-    // Problème lors de la lecture du fichier
-    if (fileptr == NULL) {
-        printf("Erreur d'ouverture du fichier\n");
-    }
-    // Lecture du fichier + stockage dans un tableau de caractères 2D
-    if (fileptr != NULL) {
-        char line[100];
-        char *token;
-        int i = 0;
-        while (fgets(line, sizeof(line), fileptr) != NULL) {
-            token = strtok(line, "\t");
-            token = strtok(NULL, "\t");
-            token = strtok(NULL, "\t");
-            strcpy(text[i], token);
-            i++;
+    char *token;
+    token = strtok(temp_ligne, "\t");
+    token = strtok(NULL, "\t");
+    token = strtok(NULL, "\t");
+    strcpy(tab_off, token);
+
+    // tab_off est maintenant de la forme Type:Genre+Accord
+    // on veut récupérer le genre
+    token = strtok(tab_off, ":");
+    token = strtok(NULL, ":");
+    // token est maintenant de la forme Genre+Accord
+    // Il faut supprimer le \n
+    token[strlen(token)-1] = '\0';
+    strcpy(tab_off, token);
+
+    if (voyelle == 1){  // Si le mot commence par une voyelle
+        // retourner 1 si le genre est masculin singulier de la forme "Mas+Sg"
+        if (strcmp(tab_off, "Mas+SG") == 0){
+            if (var == 1){
+                printf("L'");
+            }
+            else{
+                printf("l'");
+            }
+        }
+        // retourner 2 si le genre est féminin singulier de la forme "Fem+Sg"
+        if (strcmp(tab_off, "Fem+SG") == 0){
+            if (var == 1){
+                printf("L'");
+            }
+            else{
+                printf("l'");
+            }
+        }
+        // retourner 3 si le genre est masculin pluriel de la forme "Mas+Pl"
+        if (strcmp(tab_off, "Mas+PL") == 0){
+            if (var == 1){
+                printf("Les ");
+            }
+            else{
+                printf("les ");
+            }
+        }
+        // retourner 4 si le genre est féminin pluriel de la forme "Fem+Pl"
+        if (strcmp(tab_off, "Fem+PL") == 0){
+            if (var == 1){
+                printf("Les ");
+            }
+            else{
+                printf("les ");
+            }
         }
     }
-    // Fermeture du fichier
-    fclose(fileptr);
-    return (int **) text;
+    else{  // Si le mot commence par une consonne
+        // retourner 1 si le genre est masculin singulier de la forme "Mas+Sg"
+        if (strcmp(tab_off, "Mas+SG") == 0){
+            if (var == 1){
+                printf("Le ");
+            }
+            else{
+                printf("le ");
+            }
+        }
+        // retourner 2 si le genre est féminin singulier de la forme "Fem+Sg"
+        if (strcmp(tab_off, "Fem+SG") == 0){
+            if (var == 1){
+                printf("La ");
+            }
+            else{
+                printf("la ");
+            }
+        }
+        // retourner 3 si le genre est masculin pluriel de la forme "Mas+Pl"
+        if (strcmp(tab_off, "Mas+PL") == 0){
+            if (var == 1){
+                printf("Les ");
+            }
+            else{
+                printf("les ");
+            }
+        }
+        // retourner 4 si le genre est féminin pluriel de la forme "Fem+Pl"
+        if (strcmp(tab_off, "Fem+PL") == 0){
+            if (var == 1){
+                printf("Les ");
+            }
+            else{
+                printf("les ");
+            }
+        }
+    }
+
 }
 
 void extract_line(char *tab){
     FILE *fileptr;
     // Ouverture du fichier
-    fileptr = fopen("dico_10_lignes.txt", "r");
+    fileptr = fopen("dictionnaire.txt", "r");
     // Problème lors de la lecture du fichier
     if (fileptr == NULL) {
         printf("Erreur d'ouverture du fichier\n");
     }
     // Lecture du fichier + stockage de la ligne dans un tableau de caractères 1D
     if (fileptr != NULL) {
-            fgets(tab, 1287976, fileptr);  // On récupère la ligne => fgets(tab à remplir, taille max de tab, fichier ouvert)
+        fgets(tab, 1287976, fileptr);  // On récupère la ligne => fgets(tab à remplir, taille max de tab, fichier ouvert)
 
     }
     // Fermeture du fichier
@@ -114,7 +185,7 @@ void extract_line2(char *tab, int val){
     FILE *fileptr;
     int i = 0;
     // Ouverture du fichier
-    fileptr = fopen("dico_10_lignes.txt", "r");
+    fileptr = fopen("dictionnaire.txt", "r");
     // Problème lors de la lecture du fichier
     if (fileptr == NULL) {
         printf("Erreur d'ouverture du fichier\n");
@@ -129,10 +200,12 @@ void extract_line2(char *tab, int val){
 }
 
 
-void decompose_line(char *temp_ligne, char **tab_off){  // temp_ligne = tableau temporaire contenant la ligne, tab_off = tableau séparant les 3 types de la ligne
+void decompose_line(char *temp_ligne, char **tab_off, char *temp_ligne_2){  // temp_ligne = tableau temporaire contenant la ligne, tab_off = tableau séparant les 3 types de la ligne
+    strcpy(temp_ligne_2, temp_ligne);
+
     FILE *fileptr;
     // Ouverture du fichier
-    fileptr = fopen("dico_10_lignes.txt", "r");
+    fileptr = fopen("dictionnaire.txt", "r");
     // Problème lors de la lecture du fichier
     if (fileptr == NULL) {
         printf("Erreur d'ouverture du fichier\n");
@@ -159,16 +232,16 @@ void decompose_line(char *temp_ligne, char **tab_off){  // temp_ligne = tableau 
 int nature_line(char **tab){
     char *token;
     token = strtok(tab[2], ":"); // strtok permet de d'extraire une partie de la ligne par les tabulations
-    if (strncmp(token, "Ver", 3) == 0){  // strncmp permet de comparer les deux chaînes de caractères
+    if (strcmp(token, "Ver") == 0){  // strncmp permet de comparer les deux chaînes de caractères
         return 1;
     }
-    else if (strncmp(token, "Nom", 3) == 0){
+    else if (strcmp(token, "Nom") == 0){
         return 2;
     }
-    else if (strncmp(token, "Adj", 3) == 0){
+    else if (strcmp(token, "Adj") == 0){
         return 3;
     }
-    else if (strncmp(token, "Adv", 3) == 0){
+    else if (strcmp(token, "Adv") == 0){
         return 4;
     }
     else{
@@ -220,11 +293,10 @@ p_cell verif_present (p_letter_node cell, char elements) {
     }
 }
 void parcourir_le_dico(p_letter_node root){
-    char *dico = "dico_10_lignes.txt";
+    char *dico = "dictionnaire.txt";
     int cpt = 0;
-    char **tab_off = malloc(300000 *
-                            sizeof(char));  // Création d'un tableau pour séparer les 3 types d'une ligne dans un tableau en 3 lignes
-    for (int i = 0; i < 300000; i++) {
+    char **tab_off = malloc(100 * sizeof(char));  // Création d'un tableau pour séparer les 3 types d'une ligne dans un tableau en 3 lignes
+    for (int i = 0; i < 100; i++) {
         tab_off[i] = malloc(3 * sizeof(char));
     }
     FILE *fileptr = fopen(dico, "r");
@@ -234,7 +306,7 @@ void parcourir_le_dico(p_letter_node root){
     } else {
         char buf[200];
         while (fgets(buf, sizeof buf, fileptr) != NULL) {
-            decompose_line(buf, tab_off);
+            decompose_line(buf, tab_off, buf);
 
             if(nature_line(tab_off) == 2) {
                 // Création de l'arbre Nom
